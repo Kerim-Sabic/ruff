@@ -83,3 +83,18 @@ def nested_index_lookup():
     column_names = ["a", "b"]
     for index, column_name in enumerate(column_names):
         _ = data[column_names[index]]  # PLR1736
+
+
+def while_updates_item(numbers):
+    for index, number in enumerate(numbers):
+        print(numbers[index])  # PLR1736
+        while numbers[index] > 0:  # OK
+            print(numbers[index])  # OK
+            numbers[index] -= 1
+
+
+def while_without_update(numbers):
+    for index, number in enumerate(numbers):
+        while numbers[index] > 0:  # PLR1736
+            print(numbers[index])  # PLR1736
+            break

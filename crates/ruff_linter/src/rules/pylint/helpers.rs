@@ -127,6 +127,18 @@ impl Visitor<'_> for SequenceIndexVisitor<'_> {
             return;
         }
         match stmt {
+            Stmt::While(ast::StmtWhile {
+                test, body, orelse, ..
+            }) => {
+                let accesses_before_loop = self.accesses.len();
+                self.visit_expr(test);
+                self.visit_body(body);
+                // Later iterations can read values changed by an earlier iteration.
+                if self.modified {
+                    self.accesses.truncate(accesses_before_loop);
+                }
+                self.visit_body(orelse);
+            }
             Stmt::Assign(ast::StmtAssign { targets, value, .. }) => {
                 self.modified = targets.iter().any(|target| self.is_assignment(target));
                 self.visit_expr(value);

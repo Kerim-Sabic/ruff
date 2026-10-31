@@ -62,3 +62,49 @@ def for_else_no_false_positive(result: dict[str, float]) -> dict[str, float]:
             if result[res_glob] <= 0:  # okay, res_glob from loop may be unbound
                 result.pop(res_glob)
     return result
+
+
+def while_updates_item(data):
+    for key, value in data.items():
+        print(data[key])  # PLR1733: evaluated before the while loop.
+        while data[key] > 0:  # OK: the condition observes each update.
+            print(data[key])  # OK: later iterations observe each update.
+            data[key] -= 1
+        print(data[key])  # OK
+
+
+def while_updates_binding(data):
+    for key, value in data.items():
+        while data[key] > 0:  # OK
+            value = -1
+            break
+    for key, value in data.items():
+        while data[key] > 0:  # OK
+            key = "other"
+    for key, value in data.items():
+        while data[key] > 0:  # OK
+            data = {key: 0}
+
+
+def while_nested_update(data):
+    for key, value in data.items():
+        while data[key] > 0:  # OK
+            if value > 1:
+                while data[key] > 1:  # OK
+                    data[key] = 0
+
+
+def while_without_update(data):
+    for key, value in data.items():
+        while data[key] > 0:  # PLR1733
+            print(data[key])  # PLR1733
+            break
+
+
+def while_else_update(data):
+    for key, value in data.items():
+        while data[key] > 0:  # PLR1733: else executes after the last iteration.
+            break
+        else:
+            data[key] = 0
+        print(data[key])  # OK

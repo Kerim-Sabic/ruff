@@ -199,4 +199,58 @@ help: Use the loop variable directly
 84 |     for index, column_name in enumerate(column_names):
    -         _ = data[column_names[index]]  # PLR1736
 85 +         _ = data[column_name]  # PLR1736
+86 |
    |
+
+PLR1736 [*] List index lookup in `enumerate()` loop
+  --> unnecessary_list_index_lookup.py:90:15
+   |
+88 | def while_updates_item(numbers):
+89 |     for index, number in enumerate(numbers):
+90 |         print(numbers[index])  # PLR1736
+   |               ^^^^^^^^^^^^^^
+91 |         while numbers[index] > 0:  # OK
+92 |             print(numbers[index])  # OK
+   |
+help: Use the loop variable directly
+   |
+89 |     for index, number in enumerate(numbers):
+   -         print(numbers[index])  # PLR1736
+90 +         print(number)  # PLR1736
+91 |         while numbers[index] > 0:  # OK
+   |
+
+PLR1736 [*] List index lookup in `enumerate()` loop
+   --> unnecessary_list_index_lookup.py:98:15
+    |
+ 96 | def while_without_update(numbers):
+ 97 |     for index, number in enumerate(numbers):
+ 98 |         while numbers[index] > 0:  # PLR1736
+    |               ^^^^^^^^^^^^^^
+ 99 |             print(numbers[index])  # PLR1736
+100 |             break
+    |
+help: Use the loop variable directly
+   |
+97 |     for index, number in enumerate(numbers):
+   -         while numbers[index] > 0:  # PLR1736
+98 +         while number > 0:  # PLR1736
+99 |             print(numbers[index])  # PLR1736
+   |
+
+PLR1736 [*] List index lookup in `enumerate()` loop
+   --> unnecessary_list_index_lookup.py:99:19
+    |
+ 97 |     for index, number in enumerate(numbers):
+ 98 |         while numbers[index] > 0:  # PLR1736
+ 99 |             print(numbers[index])  # PLR1736
+    |                   ^^^^^^^^^^^^^^
+100 |             break
+    |
+help: Use the loop variable directly
+    |
+98  |         while numbers[index] > 0:  # PLR1736
+    -             print(numbers[index])  # PLR1736
+99  +             print(number)  # PLR1736
+100 |             break
+    |

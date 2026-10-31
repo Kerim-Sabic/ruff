@@ -136,3 +136,74 @@ help: Use existing variable
 52 +             mapped_arrays[mapped_label] = [array[i] for i in range(len(array))]  # PLR1733
 53 |     return mapped_arrays
    |
+
+PLR1733 [*] Unnecessary lookup of dictionary value by key
+  --> unnecessary_dict_index_lookup.py:69:15
+   |
+67 | def while_updates_item(data):
+68 |     for key, value in data.items():
+69 |         print(data[key])  # PLR1733: evaluated before the while loop.
+   |               ^^^^^^^^^
+70 |         while data[key] > 0:  # OK: the condition observes each update.
+71 |             print(data[key])  # OK: later iterations observe each update.
+   |
+help: Use existing variable
+   |
+68 |     for key, value in data.items():
+   -         print(data[key])  # PLR1733: evaluated before the while loop.
+69 +         print(value)  # PLR1733: evaluated before the while loop.
+70 |         while data[key] > 0:  # OK: the condition observes each update.
+   |
+
+PLR1733 [*] Unnecessary lookup of dictionary value by key
+   --> unnecessary_dict_index_lookup.py:99:15
+    |
+ 97 | def while_without_update(data):
+ 98 |     for key, value in data.items():
+ 99 |         while data[key] > 0:  # PLR1733
+    |               ^^^^^^^^^
+100 |             print(data[key])  # PLR1733
+101 |             break
+    |
+help: Use existing variable
+    |
+98  |     for key, value in data.items():
+    -         while data[key] > 0:  # PLR1733
+99  +         while value > 0:  # PLR1733
+100 |             print(data[key])  # PLR1733
+    |
+
+PLR1733 [*] Unnecessary lookup of dictionary value by key
+   --> unnecessary_dict_index_lookup.py:100:19
+    |
+ 98 |     for key, value in data.items():
+ 99 |         while data[key] > 0:  # PLR1733
+100 |             print(data[key])  # PLR1733
+    |                   ^^^^^^^^^
+101 |             break
+    |
+help: Use existing variable
+    |
+99  |         while data[key] > 0:  # PLR1733
+    -             print(data[key])  # PLR1733
+100 +             print(value)  # PLR1733
+101 |             break
+    |
+
+PLR1733 [*] Unnecessary lookup of dictionary value by key
+   --> unnecessary_dict_index_lookup.py:106:15
+    |
+104 | def while_else_update(data):
+105 |     for key, value in data.items():
+106 |         while data[key] > 0:  # PLR1733: else executes after the last iteration.
+    |               ^^^^^^^^^
+107 |             break
+108 |         else:
+    |
+help: Use existing variable
+    |
+105 |     for key, value in data.items():
+    -         while data[key] > 0:  # PLR1733: else executes after the last iteration.
+106 +         while value > 0:  # PLR1733: else executes after the last iteration.
+107 |             break
+    |
